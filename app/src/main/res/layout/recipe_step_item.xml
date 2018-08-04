@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:id="@+id/frameLayout_step_image"
+        android:layout_width="@dimen/recipe_details_image_width"
+        android:layout_height="@dimen/recipe_details_image_height"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="2"
+        app:layout_constraintBottom_toBottomOf="@+id/textView_short_description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.00999999">
+
+        <ImageView
+            android:id="@+id/imageView_recipe_image"
+            android:layout_width="@dimen/recipe_details_image_width"
+            android:layout_height="@dimen/recipe_details_image_height"
+            android:scaleType="fitXY"
+            android:src="@drawable/dough"
+            android:background="@color/md_grey_100"
+            android:contentDescription="@string/recipe_image" />
+
+        <TextView
+            android:id="@+id/textView_image_unavailable"
+            android:layout_width="@dimen/recipe_details_image_width"
+            android:layout_height="@dimen/recipe_details_image_height"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="@string/no_preview_availabe" />
+
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/textView_short_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:gravity="start"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@id/frameLayout_step_image"
+        app:layout_constraintTop_toBottomOf="@+id/textView_step_id"
+        tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry." />
+
+    <TextView
+        android:id="@+id/textView_step_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="start"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/frameLayout_step_image"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Step 6" />
+
+
+</android.support.constraint.ConstraintLayout>

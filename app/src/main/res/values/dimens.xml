@@ -2,6 +2,10 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="baking_card_min_height">100dp</dimen>
+    <dimen name="baking_card_min_height">250dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="recipe_details_image_width">80dp</dimen>
+    <dimen name="recipe_details_image_height">80dp</dimen>
+    <dimen name="video_player_width">200dp</dimen>
+    <dimen name="video_player_height">200dp</dimen>
 </resources>
