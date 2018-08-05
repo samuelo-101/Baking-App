@@ -40,10 +40,16 @@ public class StepsListRecyclerViewAdapter extends RecyclerView.Adapter<StepsList
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final Step step = steps.get(position);
 
-        holder.mTextViewStepId.setText(new StringBuilder().append(mContext.getString(R.string.step)).append(" ").append(step.getId() + 1).toString());
+        if(step.getId() > 0) {
+            holder.mTextViewStepId.setText(new StringBuilder().append(mContext.getString(R.string.step)).append(" ").append(step.getId()).toString());
+        } else {
+            holder.mTextViewStepId.setText(step.getDescription());
+        }
+
+        holder.mImageViewStepDone.setVisibility(View.GONE);
 
         if(!TextUtils.isEmpty(step.getThumbnailURL())) {
             Picasso.with(mContext)
@@ -59,6 +65,7 @@ public class StepsListRecyclerViewAdapter extends RecyclerView.Adapter<StepsList
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                holder.mImageViewStepDone.setVisibility(View.VISIBLE);
                 mStepItemClickListener.onClick(step);
             }
         });
@@ -68,7 +75,6 @@ public class StepsListRecyclerViewAdapter extends RecyclerView.Adapter<StepsList
     public int getItemCount() {
         return this.steps == null ? 0 : this.steps.size();
     }
-
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -83,6 +89,9 @@ public class StepsListRecyclerViewAdapter extends RecyclerView.Adapter<StepsList
 
         @BindView(R.id.textView_short_description)
         TextView mTextViewShortDescription;
+
+        @BindView(R.id.imageView_check)
+        ImageView mImageViewStepDone;
 
         ViewHolder(View itemView) {
             super(itemView);

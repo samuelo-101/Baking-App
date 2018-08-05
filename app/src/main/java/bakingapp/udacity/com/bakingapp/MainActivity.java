@@ -59,15 +59,6 @@ public class MainActivity extends AppCompatActivity implements BakingListRecycle
 
         setSupportActionBar(mToolBar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -75,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements BakingListRecycle
             }
         });
 
-        mRecyclerViewBakingList.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+        //mRecyclerViewBakingList.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         mRecyclerViewBakingList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         adapter = new BakingListRecyclerViewAdapter(this, new ArrayList<Recipe>(), this);
         mRecyclerViewBakingList.setAdapter(adapter);

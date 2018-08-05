@@ -1,27 +1,14 @@
 package bakingapp.udacity.com.bakingapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
-
-import java.util.Arrays;
 
 import bakingapp.udacity.com.bakingapp.adapter.StepsListRecyclerViewAdapter;
 import bakingapp.udacity.com.bakingapp.api.model.Recipe;
@@ -29,7 +16,10 @@ import bakingapp.udacity.com.bakingapp.api.model.Step;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RecipeDetailsActivity extends AppCompatActivity implements StepsListRecyclerViewAdapter.StepItemClickListener {
+public class RecipeDetailsActivity extends AppCompatActivity
+        implements StepsListRecyclerViewAdapter.StepItemClickListener,
+        StepListFragment.OnFragmentInteractionListener,
+        StepMediaFragment.OnFragmentInteractionListener {
 
     private final String TAG = getClass().getName();
 
@@ -39,20 +29,6 @@ public class RecipeDetailsActivity extends AppCompatActivity implements StepsLis
 
     @BindView(R.id.toolbar)
     Toolbar mToolBar;
-
-    @BindView(R.id.coordinatorLayout_container)
-    ConstraintLayout mCoordinatorLayoutContainer;
-
-    @BindView(R.id.imageView_recipe_image)
-    ImageView mImageViewRecipeImage;
-
-    @BindView(R.id.textView_image_unavailable)
-    TextView mTextViewNoImageMessage;
-
-    @BindView(R.id.recyclerView_recipe_steps)
-    RecyclerView mRecyclerViewSteps;
-
-    private StepsListRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +40,15 @@ public class RecipeDetailsActivity extends AppCompatActivity implements StepsLis
         ButterKnife.bind(this);
 
         setSupportActionBar(mToolBar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(recipe.getName());
 
-        setupUI();
+        if(isTabletScreen()) {
+            // Tablet
+            setupUIForTabletLayout();
+        } else {
+            setupUIForNonTabletDisplay();
+        }
     }
 
     @Override
@@ -98,28 +78,22 @@ public class RecipeDetailsActivity extends AppCompatActivity implements StepsLis
         }
     }
 
-    private void setupUI() {
-        mCoordinatorLayoutContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    private boolean isTabletScreen() {
+        return findViewById(R.id.frameLayout_step_list_fragment) != null && findViewById(R.id.frameLayout_step_media_fragment) != null;
+    }
 
-            }
-        });
+    private void setupUIForTabletLayout() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayout_step_list_fragment, StepListFragment.newInstance(recipe));
+        fragmentTransaction.commit();
+    }
 
-        if(!TextUtils.isEmpty(recipe.getImage())) {
-            Picasso.with(getApplicationContext())
-                    .load(recipe.getImage())
-                    .placeholder(R.drawable.dough)
-                    .error(R.drawable.ic_broken_grey)
-                    .into(mImageViewRecipeImage);
-
-            mTextViewNoImageMessage.setVisibility(View.GONE);
-        }
-
-        mRecyclerViewSteps.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        mRecyclerViewSteps.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
-        adapter = new StepsListRecyclerViewAdapter(getApplicationContext(), recipe.getSteps(), this);
-        mRecyclerViewSteps.setAdapter(adapter);
+    private void setupUIForNonTabletDisplay() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayout_fragment_container, StepListFragment.newInstance(recipe));
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -129,5 +103,18 @@ public class RecipeDetailsActivity extends AppCompatActivity implements StepsLis
         bundle.putParcelable(StepActivity.ARG_STEP, step);
         intent.putExtras(bundle);
         startActivity(intent);
+    }
+
+    @Override
+    public void onFragmentStepClick(Step step) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayout_step_media_fragment, StepMediaFragment.newInstance(step));
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
