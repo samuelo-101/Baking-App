@@ -48,7 +48,6 @@ public class StepListFragment extends Fragment implements StepsListRecyclerViewA
         // Required empty public constructor
     }
 
-
     public static StepListFragment newInstance(Recipe recipe) {
         StepListFragment fragment = new StepListFragment();
         Bundle args = new Bundle();

@@ -25,4 +25,12 @@
 
     <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="ListItemImageView">
+        <item name="android:layout_width">@dimen/recipe_details_image_width</item>
+        <item name="android:layout_height">@dimen/recipe_details_image_height</item>
+        <item name="android:background">@color/md_grey_100</item>
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:src">@drawable/dough</item>
+    </style>
+
 </resources>

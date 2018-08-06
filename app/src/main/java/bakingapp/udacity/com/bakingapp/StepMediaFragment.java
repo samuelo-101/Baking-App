@@ -108,9 +108,11 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
         View view = inflater.inflate(R.layout.fragment_step, container, false);
 
         if(view.findViewById(R.id.textView_description) != null) {
+            mListener.setupDisplay(false);
             ButterKnife.bind(this, view);
             setupUIForPortraitOrTabletMode();
         } else {
+            mListener.setupDisplay(true);
             setupUIForLandscapeMode(view);
         }
 
@@ -138,6 +140,7 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
     public void onDestroy() {
         super.onDestroy();
         releasePlayer();
+        mListener.setupDisplay(false);
     }
 
     private void validateStepExtra() {
@@ -297,6 +300,6 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void setupDisplay(boolean isFullScreen);
     }
 }

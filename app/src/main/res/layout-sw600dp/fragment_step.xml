@@ -20,12 +20,9 @@
 
         <ImageView
             android:id="@+id/imageView_step_image"
-            android:layout_width="@dimen/recipe_details_image_width"
-            android:layout_height="@dimen/recipe_details_image_height"
-            android:background="@color/md_grey_100"
+            style="@style/ListItemImageView"
             android:contentDescription="@string/recipe_image"
-            android:scaleType="fitXY"
-            android:src="@drawable/dough" />
+            />
 
         <TextView
             android:id="@+id/textView_image_unavailable"

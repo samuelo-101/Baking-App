@@ -39,13 +39,11 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
 
         validateRecipeExtra(savedInstanceState);
 
-        if(findViewById(R.id.toolbar) != null) {
-            ButterKnife.bind(this);
+        ButterKnife.bind(this);
 
-            setSupportActionBar(mToolBar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(recipe.getName());
-        }
+        setSupportActionBar(mToolBar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(recipe.getName());
 
         if(isTabletScreen()) {
             setupUIForTabletLayout();
@@ -127,7 +125,11 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void setupDisplay(boolean isFullScreen) {
+        if(isFullScreen) {
+            getSupportActionBar().hide();
+        } else {
+            getSupportActionBar().show();
+        }
     }
 }
