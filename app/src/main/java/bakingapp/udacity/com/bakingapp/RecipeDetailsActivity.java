@@ -126,9 +126,9 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
 
     @Override
     public void setupDisplay(boolean isFullScreen) {
-        if(isFullScreen) {
+        if(isFullScreen && getSupportActionBar().isShowing()) {
             getSupportActionBar().hide();
-        } else {
+        } else if(!isFullScreen && ! getSupportActionBar().isShowing()) {
             getSupportActionBar().show();
         }
     }

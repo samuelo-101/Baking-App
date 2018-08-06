@@ -11,10 +11,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import bakingapp.udacity.com.bakingapp.R;
@@ -24,7 +22,7 @@ import bakingapp.udacity.com.bakingapp.api.model.Step;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class StepsListRecyclerViewAdapter extends RecyclerView.Adapter<StepsListRecyclerViewAdapter.ViewHolder> {
+public class StepsListRecyclerViewAdapter extends RecyclerView.Adapter {
 
     private final int INGREDIENTS_VIEW_TYPE = 0;
     private final int HEADING_VIEW_TYPE = 1;
@@ -43,76 +41,78 @@ public class StepsListRecyclerViewAdapter extends RecyclerView.Adapter<StepsList
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view;
-
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) { ;
         if(viewType == INGREDIENTS_VIEW_TYPE) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_ingredients_layout_navigator, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_ingredients_layout_navigator, parent, false);
+            return new ViewHolderIngredientsOption(view);
         } else if(viewType == HEADING_VIEW_TYPE) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.steps_list_heading, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.steps_list_heading, parent, false);
+            return new ViewHolderStepsHeading(view);
         } else {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_step_item, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_step_item, parent, false);
+            return new ViewHolderSteps(view);
         }
-
-        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
         int itemViewType = getItemViewType(position);
 
         if(itemViewType == INGREDIENTS_VIEW_TYPE) {
+            ViewHolderIngredientsOption viewHolder = (ViewHolderIngredientsOption) holder;
             if(!TextUtils.isEmpty(recipe.getImage())) {
                 Picasso.with(mContext)
                         .load(recipe.getImage())
                         .placeholder(R.drawable.dough)
                         .error(R.drawable.ic_broken_grey)
-                        .into(holder.mImageViewRecipeImage);
-                holder.mTextViewNoImageMessage.setVisibility(View.GONE);
+                        .into(viewHolder.mImageViewRecipeImage);
+                viewHolder.mTextViewNoImageMessage.setVisibility(View.GONE);
             }
 
-            holder.mCoordinatorLayoutContainer.setOnClickListener(new View.OnClickListener() {
+            viewHolder.mCoordinatorLayoutContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mStepItemClickListener.onIngredientsClick(recipe.getIngredients());
                 }
             });
 
-            holder.mImageButtonNavIngredients.setOnClickListener(new View.OnClickListener() {
+            viewHolder.mImageButtonNavIngredients.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mStepItemClickListener.onIngredientsClick(recipe.getIngredients());
                 }
             });
         } else if(itemViewType == HEADING_VIEW_TYPE) {
-            holder.mTextViewStepsHeading.setText(mContext.getString(R.string.steps));
+            ViewHolderStepsHeading viewHolder = (ViewHolderStepsHeading) holder;
+            viewHolder.mTextViewStepsHeading.setText(mContext.getString(R.string.steps));
         } else if(itemViewType == STEPS_VIEW_TYPE) {
+            final ViewHolderSteps viewHolder = (ViewHolderSteps) holder;
             final Step step = steps.get(position - 2);
 
             if (step.getId() > 0) {
-                holder.mTextViewStepId.setText(new StringBuilder().append(mContext.getString(R.string.step)).append(" ").append(step.getId()).toString());
+                viewHolder.mTextViewStepId.setText(new StringBuilder().append(mContext.getString(R.string.step)).append(" ").append(step.getId()).toString());
             } else {
-                holder.mTextViewStepId.setText(step.getDescription());
+                viewHolder.mTextViewStepId.setText(step.getDescription());
             }
 
-            holder.mImageViewStepDone.setVisibility(View.GONE);
+            viewHolder.mImageViewStepDone.setVisibility(View.GONE);
 
             if (!TextUtils.isEmpty(step.getThumbnailURL())) {
                 Picasso.with(mContext)
                         .load(step.getThumbnailURL())
                         .placeholder(R.drawable.ic_image_grey)
                         .error(R.drawable.ic_broken_grey)
-                        .into(holder.mImageViewStepImage);
-                holder.mTextViewImageUnavailableMessage.setVisibility(View.GONE);
+                        .into(viewHolder.mImageViewStepImage);
+                viewHolder.mTextViewImageUnavailableMessage.setVisibility(View.GONE);
             }
 
-            holder.mTextViewShortDescription.setText(step.getShortDescription());
+            viewHolder.mTextViewShortDescription.setText(step.getShortDescription());
 
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    holder.mImageViewStepDone.setVisibility(View.VISIBLE);
+                    viewHolder.mImageViewStepDone.setVisibility(View.VISIBLE);
                     mStepItemClickListener.onStepClick(step);
                 }
             });
@@ -134,7 +134,7 @@ public class StepsListRecyclerViewAdapter extends RecyclerView.Adapter<StepsList
         return STEPS_VIEW_TYPE;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolderSteps extends RecyclerView.ViewHolder {
 
         @BindView(R.id.textView_step_id)
         TextView mTextViewStepId;
@@ -151,38 +151,45 @@ public class StepsListRecyclerViewAdapter extends RecyclerView.Adapter<StepsList
         @BindView(R.id.imageView_check)
         ImageView mImageViewStepDone;
 
-        ConstraintLayout mCoordinatorLayoutContainer;
+        ViewHolderSteps(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
 
-        ImageView mImageViewRecipeImage;
+    class ViewHolderStepsHeading extends RecyclerView.ViewHolder {
 
-        TextView mTextViewNoImageMessage;
-
-        ImageButton mImageButtonNavIngredients;
-
+        @BindView(R.id.textView_steps_label)
         TextView mTextViewStepsHeading;
 
-        ViewHolder(View itemView) {
+        ViewHolderStepsHeading(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
 
-            if(itemView.findViewById(R.id.textView_steps_label) != null) {
-                mTextViewStepsHeading = itemView.findViewById(R.id.textView_steps_label);
-            }
+    class ViewHolderIngredientsOption extends RecyclerView.ViewHolder {
 
-            if(itemView.findViewById(R.id.textView_step_id) != null) {
-                ButterKnife.bind(this, itemView);
-            }
+        @BindView(R.id.coordinatorLayout_container)
+        ConstraintLayout mCoordinatorLayoutContainer;
 
-            if(itemView.findViewById(R.id.coordinatorLayout_container) != null){
-                mCoordinatorLayoutContainer = itemView.findViewById(R.id.coordinatorLayout_container);
-                mImageViewRecipeImage = itemView.findViewById(R.id.imageView_recipe_image);
-                mTextViewNoImageMessage = itemView.findViewById(R.id.textView_image_unavailable);
-                mImageButtonNavIngredients = itemView.findViewById(R.id.imageButton_view_ingredients);
-            }
+        @BindView(R.id.imageView_recipe_image)
+        ImageView mImageViewRecipeImage;
+
+        @BindView(R.id.textView_image_unavailable)
+        TextView mTextViewNoImageMessage;
+
+        @BindView(R.id.imageButton_view_ingredients)
+        ImageButton mImageButtonNavIngredients;
+
+        ViewHolderIngredientsOption(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 
     public interface StepItemClickListener {
-        public void onStepClick(Step step);
-        public void onIngredientsClick(List<Ingredient> ingredients);
+        void onStepClick(Step step);
+        void onIngredientsClick(List<Ingredient> ingredients);
     }
 }
