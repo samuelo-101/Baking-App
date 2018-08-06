@@ -106,18 +106,15 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_step, container, false);
-        ButterKnife.bind(this, view);
 
-        setupUIForPortraitMode();
+        if(view.findViewById(R.id.textView_description) != null) {
+            ButterKnife.bind(this, view);
+            setupUIForPortraitOrTabletMode();
+        } else {
+            setupUIForLandscapeMode(view);
+        }
 
         return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -160,7 +157,7 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
         setupMediaPlayerViews();
     }
 
-    private void setupUIForPortraitMode() {
+    private void setupUIForPortraitOrTabletMode() {
         if (!TextUtils.isEmpty(step.getThumbnailURL())) {
             Picasso.with(getContext())
                     .load(step.getThumbnailURL())
@@ -226,7 +223,6 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
 
 
     private void releasePlayer() {
-        //mNotificationManager.cancelAll();
         if(mExoPlayer != null) {
             mExoPlayer.stop();
             mExoPlayer.release();

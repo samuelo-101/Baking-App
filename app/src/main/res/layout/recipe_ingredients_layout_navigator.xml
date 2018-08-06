@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/coordinatorLayout_container"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/linearLayout_ingredients_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2">
+
+            <ImageView
+                android:id="@+id/imageView_recipe_image"
+                android:layout_width="@dimen/recipe_details_image_width"
+                android:layout_height="@dimen/recipe_details_image_height"
+                android:layout_gravity="center_vertical"
+                android:background="@color/md_grey_100"
+                android:contentDescription="@string/recipe_image" />
+
+            <TextView
+                android:id="@+id/textView_image_unavailable"
+                android:layout_width="@dimen/recipe_details_image_width"
+                android:layout_height="@dimen/recipe_details_image_height"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/no_preview_availabe" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/textView_ingredients"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            android:layout_weight="6"
+            android:gravity="center"
+            android:text="@string/ingredients"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/imageButton_view_ingredients"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_weight="2"
+            android:background="@drawable/button_selector"
+            android:contentDescription="@string/view_ingredients"
+            android:padding="8dp"
+            app:srcCompat="@drawable/ic_keyboard_arrow_right_white_48" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -2,24 +2,19 @@ package bakingapp.udacity.com.bakingapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import java.util.List;
 
 import bakingapp.udacity.com.bakingapp.adapter.StepsListRecyclerViewAdapter;
+import bakingapp.udacity.com.bakingapp.api.model.Ingredient;
 import bakingapp.udacity.com.bakingapp.api.model.Recipe;
 import bakingapp.udacity.com.bakingapp.api.model.Step;
 import butterknife.BindView;
@@ -41,15 +36,6 @@ public class StepListFragment extends Fragment implements StepsListRecyclerViewA
     public static final String ARG_RECIPE = "RecipeDetailsActivity_ARG_RECIPE";
 
     private Recipe recipe;
-
-    @BindView(R.id.coordinatorLayout_container)
-    ConstraintLayout mCoordinatorLayoutContainer;
-
-    @BindView(R.id.imageView_recipe_image)
-    ImageView mImageViewRecipeImage;
-
-    @BindView(R.id.textView_image_unavailable)
-    TextView mTextViewNoImageMessage;
 
     @BindView(R.id.recyclerView_recipe_steps)
     RecyclerView mRecyclerViewSteps;
@@ -117,32 +103,21 @@ public class StepListFragment extends Fragment implements StepsListRecyclerViewA
     }
 
     private void setupUI() {
-        mCoordinatorLayoutContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        if(!TextUtils.isEmpty(recipe.getImage())) {
-            Picasso.with(getContext())
-                    .load(recipe.getImage())
-                    .placeholder(R.drawable.dough)
-                    .error(R.drawable.ic_broken_grey)
-                    .into(mImageViewRecipeImage);
-
-            mTextViewNoImageMessage.setVisibility(View.GONE);
-        }
-
         mRecyclerViewSteps.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerViewSteps.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        adapter = new StepsListRecyclerViewAdapter(getContext(), recipe.getSteps(), this);
+        adapter = new StepsListRecyclerViewAdapter(getContext(), recipe, this);
         mRecyclerViewSteps.setAdapter(adapter);
     }
 
+
     @Override
-    public void onClick(Step step) {
+    public void onStepClick(Step step) {
         mListener.onFragmentStepClick(step);
+    }
+
+    @Override
+    public void onIngredientsClick(List<Ingredient> ingredients) {
+        mListener.onFragmentIngredientsNavigationClick(ingredients);
     }
 
 
@@ -159,5 +134,6 @@ public class StepListFragment extends Fragment implements StepsListRecyclerViewA
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentStepClick(Step step);
+        void onFragmentIngredientsNavigationClick(List<Ingredient> ingredients);
     }
 }
