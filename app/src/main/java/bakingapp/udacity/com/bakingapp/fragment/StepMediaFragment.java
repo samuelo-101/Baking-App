@@ -1,4 +1,4 @@
-package bakingapp.udacity.com.bakingapp;
+package bakingapp.udacity.com.bakingapp.fragment;
 
 import android.app.NotificationManager;
 import android.content.Context;
@@ -35,6 +35,8 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.squareup.picasso.Picasso;
 
+import bakingapp.udacity.com.bakingapp.MainActivity;
+import bakingapp.udacity.com.bakingapp.R;
 import bakingapp.udacity.com.bakingapp.api.model.Step;
 import butterknife.BindView;
 import butterknife.ButterKnife;

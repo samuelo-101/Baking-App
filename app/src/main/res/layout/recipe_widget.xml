@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/relativeLayout_widget_container"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:maxHeight="400dp"
+    android:padding="@dimen/widget_margin">
+
+    <ImageView
+        android:src="@drawable/widget_background"
+        android:scaleType="fitXY"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/treat" />
+
+    <TextView
+        android:id="@+id/textView_recipe_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="8dp"
+        android:textColor="@color/white"
+        android:contentDescription="@string/recipe_name"
+        android:fontFamily="cursive"
+        android:gravity="center_horizontal"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        tools:text="Cake" />
+
+    <ListView
+        android:id="@+id/listView_ingredients"
+        android:layout_below="@+id/textView_recipe_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/widget_list_item"/>
+
+</RelativeLayout>

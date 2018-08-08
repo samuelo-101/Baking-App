@@ -1,4 +1,4 @@
-package bakingapp.udacity.com.bakingapp;
+package bakingapp.udacity.com.bakingapp.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import bakingapp.udacity.com.bakingapp.MainActivity;
+import bakingapp.udacity.com.bakingapp.R;
 import bakingapp.udacity.com.bakingapp.adapter.IngredientsListRecyclerViewAdapter;
 import bakingapp.udacity.com.bakingapp.api.model.Ingredient;
 import butterknife.BindView;

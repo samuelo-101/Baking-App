@@ -1,5 +1,7 @@
 package bakingapp.udacity.com.bakingapp;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,7 +27,14 @@ import java.util.List;
 import bakingapp.udacity.com.bakingapp.adapter.BakingListRecyclerViewAdapter;
 import bakingapp.udacity.com.bakingapp.api.model.Recipe;
 import bakingapp.udacity.com.bakingapp.api.service.BakingApiServiceHelper;
+import bakingapp.udacity.com.bakingapp.db.entity.IngredientEntity;
+import bakingapp.udacity.com.bakingapp.db.entity.RecipeEntity;
+import bakingapp.udacity.com.bakingapp.db.entity.StepEntity;
+import bakingapp.udacity.com.bakingapp.db.repo.ManageDesiredRecipeRepository;
+import bakingapp.udacity.com.bakingapp.db.repo.dto.FetchDesiredRecipeDTO;
+import bakingapp.udacity.com.bakingapp.util.DataTransferUtil;
 import bakingapp.udacity.com.bakingapp.util.DialogUtil;
+import bakingapp.udacity.com.bakingapp.widget.RecipeWidget;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -34,7 +43,7 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements BakingListRecyclerViewAdapter.BakingRecipeItemClickListener {
+public class MainActivity extends AppCompatActivity implements BakingListRecyclerViewAdapter.BakingRecipeItemClickListener, ManageDesiredRecipeRepository.DatabaseOperationCallback {
 
     private final String TAG = getClass().getName();
 
@@ -51,6 +60,10 @@ public class MainActivity extends AppCompatActivity implements BakingListRecycle
 
     private CompositeDisposable disposable = new CompositeDisposable();
 
+    private ManageDesiredRecipeRepository manageDesiredRecipeRepository;
+
+    private RecipeEntity recipeEntity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,12 +79,17 @@ public class MainActivity extends AppCompatActivity implements BakingListRecycle
             }
         });
 
-        //mRecyclerViewBakingList.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+        manageDesiredRecipeRepository = new ManageDesiredRecipeRepository(getApplicationContext(), this);
+        manageDesiredRecipeRepository.getDesiredRecipe();
         mRecyclerViewBakingList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        adapter = new BakingListRecyclerViewAdapter(this, new ArrayList<Recipe>(), this);
+        adapter = new BakingListRecyclerViewAdapter(getApplicationContext(), new ArrayList<Recipe>(), this);
         mRecyclerViewBakingList.setAdapter(adapter);
 
         doFetchBakingRecipes();
+
+        Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.setComponent(new ComponentName(getApplicationContext(), RecipeWidget.class));
+        sendBroadcast(intent);
     }
 
     private void doFetchBakingRecipes() {
@@ -120,7 +138,8 @@ public class MainActivity extends AppCompatActivity implements BakingListRecycle
         switch (responseCode) {
             case 200:
                 showLoading(false);
-                adapter.setRecipes(response.body());
+                List<Recipe> recipes = response.body();
+                adapter.setRecipes(recipes);
                 break;
             default:
                 showLoading(false);
@@ -136,16 +155,66 @@ public class MainActivity extends AppCompatActivity implements BakingListRecycle
 
 
     @Override
-    public void onClick(int id) {
+    public void onRecipeClick(int id) {
         Log.i(TAG, String.valueOf(id));
     }
 
     @Override
-    public void onClick(Recipe recipe) {
+    public void onRecipeClick(Recipe recipe, boolean isDesired) {
         Intent intent = new Intent(getApplicationContext(), RecipeDetailsActivity.class);
         Bundle extras = new Bundle();
         extras.putParcelable(RecipeDetailsActivity.ARG_RECIPE, recipe);
+        extras.putBoolean(RecipeDetailsActivity.ARG_RECIPE_IS_DESIRED, isDesired);
         intent.putExtras(extras);
         startActivity(intent);
+    }
+
+    @Override
+    public void onMakeRecipeDesiredClick(Recipe recipe) {
+        RecipeEntity recipeEntity = DataTransferUtil.recipeEntityFromModel(recipe);
+        List<IngredientEntity> ingredientEntities = DataTransferUtil.ingredientEntityListFromModelList(recipe.getId(), recipe.getIngredients());
+        List<StepEntity> stepEntities = DataTransferUtil.stepEntityListFromModelList(recipe.getId(), recipe.getSteps());
+        manageDesiredRecipeRepository
+                .saveDesiredRecipe(recipeEntity, ingredientEntities, stepEntities);
+    }
+
+    @Override
+    public void onSaveDesiredRecipeSuccess() {
+        Snackbar.make(mRecyclerViewBakingList, getString(R.string.recipe_set_as_desired), Snackbar.LENGTH_LONG).show();
+        manageDesiredRecipeRepository.getDesiredRecipe();
+
+        Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.setComponent(new ComponentName(getApplicationContext(), RecipeWidget.class));
+        sendBroadcast(intent);
+    }
+
+    @Override
+    public void onSuccess() {
+
+    }
+
+    @Override
+    public void onGetDesiredRecipeSuccess(final RecipeEntity recipeEntity) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.updateRecipesWithDesiredRecipe(recipeEntity);
+            }
+        });
+    }
+
+    @Override
+    public void onGetDesiredRecipeStepsSuccess(List<StepEntity> stepEntities) {
+
+    }
+
+    @Override
+    public void onGetDesiredRecipeModelWithStepsAndIngredientsSuccess(FetchDesiredRecipeDTO fetchDesiredRecipeDTO) {
+
+    }
+
+    @Override
+    public void onError(String message) {
+
     }
 }

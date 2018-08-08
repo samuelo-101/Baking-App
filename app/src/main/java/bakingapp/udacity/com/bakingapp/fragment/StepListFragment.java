@@ -1,4 +1,4 @@
-package bakingapp.udacity.com.bakingapp;
+package bakingapp.udacity.com.bakingapp.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import bakingapp.udacity.com.bakingapp.MainActivity;
+import bakingapp.udacity.com.bakingapp.R;
 import bakingapp.udacity.com.bakingapp.adapter.StepsListRecyclerViewAdapter;
 import bakingapp.udacity.com.bakingapp.api.model.Ingredient;
 import bakingapp.udacity.com.bakingapp.api.model.Recipe;

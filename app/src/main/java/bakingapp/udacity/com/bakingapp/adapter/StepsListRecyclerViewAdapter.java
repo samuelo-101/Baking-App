@@ -93,7 +93,7 @@ public class StepsListRecyclerViewAdapter extends RecyclerView.Adapter {
             if (step.getId() > 0) {
                 viewHolder.mTextViewStepId.setText(new StringBuilder().append(mContext.getString(R.string.step)).append(" ").append(step.getId()).toString());
             } else {
-                viewHolder.mTextViewStepId.setText(step.getDescription());
+                viewHolder.mTextViewStepId.setText(step.getShortDescription());
             }
 
             viewHolder.mImageViewStepDone.setVisibility(View.GONE);

@@ -15,6 +15,8 @@ public class Recipe implements Parcelable {
     private int servings;
     private String image;
 
+    public Recipe() {}
+
     public Recipe(Parcel in) {
         id = in.readInt();
         name = in.readString();

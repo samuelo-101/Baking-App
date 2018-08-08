@@ -1,7 +1,6 @@
 package bakingapp.udacity.com.bakingapp;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +15,9 @@ import java.util.List;
 import bakingapp.udacity.com.bakingapp.api.model.Ingredient;
 import bakingapp.udacity.com.bakingapp.api.model.Recipe;
 import bakingapp.udacity.com.bakingapp.api.model.Step;
+import bakingapp.udacity.com.bakingapp.fragment.IngredientsFragment;
+import bakingapp.udacity.com.bakingapp.fragment.StepListFragment;
+import bakingapp.udacity.com.bakingapp.fragment.StepMediaFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -26,8 +28,10 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
     private final String TAG = getClass().getName();
 
     public static final String ARG_RECIPE = "RecipeDetailsActivity_ARG_RECIPE";
+    public static final String ARG_RECIPE_IS_DESIRED = "RecipeDetailsActivity_ARG_RECIPE_IS_DESIRED";
 
     private Recipe recipe;
+    private boolean isRecipeDesired;
 
     @BindView(R.id.toolbar)
     Toolbar mToolBar;
@@ -70,8 +74,9 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
 
     private void validateRecipeExtra(Bundle savedInstanceState) {
         Bundle extras = savedInstanceState == null ? getIntent().getExtras() : savedInstanceState;
-        if (extras != null && extras.containsKey(ARG_RECIPE)) {
+        if (extras != null && extras.containsKey(ARG_RECIPE) && extras.containsKey(ARG_RECIPE_IS_DESIRED)) {
             recipe = extras.getParcelable(ARG_RECIPE);
+            isRecipeDesired = extras.getBoolean(ARG_RECIPE_IS_DESIRED);
         } else {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
