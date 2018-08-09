@@ -30,25 +30,9 @@ public class RecipeWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId, FetchDesiredRecipeDTO fetchDesiredRecipeDTO) {
 
-        String recipeName = (fetchDesiredRecipeDTO != null && fetchDesiredRecipeDTO.getRecipe() != null) ? fetchDesiredRecipeDTO.getRecipe().getName() : context.getString(R.string.tap_to_select_your_desired_recipe);
+        String recipeName = (fetchDesiredRecipeDTO != null && fetchDesiredRecipeDTO.getRecipe() != null) ? fetchDesiredRecipeDTO.getRecipe().getName() : context.getString(R.string.you_have_no_desired_recipe_selected);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
-        views.setTextViewText(R.id.imageButton_go_to_activity, recipeName);
-
-        Intent navIntent;
-        if(fetchDesiredRecipeDTO != null && fetchDesiredRecipeDTO.getRecipe() != null) {
-            navIntent = new Intent(context, RecipeDetailsActivity.class);
-            Recipe recipe = fetchDesiredRecipeDTO.getRecipe();
-            recipe.setSteps(fetchDesiredRecipeDTO.getSteps());
-            recipe.setIngredients(fetchDesiredRecipeDTO.getIngredients());
-            Bundle extras = new Bundle();
-            extras.putParcelable(RecipeDetailsActivity.ARG_RECIPE, recipe);
-            navIntent.putExtras(extras);
-        } else {
-            navIntent = new Intent(context, MainActivity.class);
-        }
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, navIntent, 0);
-        views.setOnClickPendingIntent(R.id.imageButton_go_to_activity, pendingIntent);
+        views.setTextViewText(R.id.textView_recipe_name, recipeName);
 
         Intent intent = new Intent(context, RecipeWidgetService.class);
         views.setRemoteAdapter(R.id.listView_ingredients, intent);

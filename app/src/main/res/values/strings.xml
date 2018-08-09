@@ -23,6 +23,6 @@
     <string name="select_recipe">Select Recipe</string>
     <string name="error_db_query_insert_failed">Sorry, something went wrong. Please try again.</string>
     <string name="recipe_set_as_desired">This recipe has been set as your desired recipe</string>
-    <string name="tap_to_select_your_desired_recipe">Tap to select your desired recipe.</string>
+    <string name="you_have_no_desired_recipe_selected">No desired recipe selected.</string>
     <string name="treat">Treat</string>
 </resources>

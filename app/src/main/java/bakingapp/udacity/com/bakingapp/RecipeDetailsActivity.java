@@ -40,7 +40,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
 
-        if (!validateRecipeExtra()) {
+        if (!validateRecipeExtra(savedInstanceState)) {
             return;
         }
 
@@ -65,18 +65,8 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
         outState.putParcelable(ARG_RECIPE, recipe);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(this);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private boolean validateRecipeExtra() {
-        Bundle extras = getIntent().getExtras();
+    private boolean validateRecipeExtra(Bundle savedInstanceState) {
+        Bundle extras = savedInstanceState == null ? getIntent().getExtras() : savedInstanceState;
         if (extras != null && extras.containsKey(ARG_RECIPE)) {
             recipe = extras.getParcelable(ARG_RECIPE);
             return true;

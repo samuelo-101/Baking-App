@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements BakingListRecycle
                 e.printStackTrace();
                 showLoading(false);
                 if (e instanceof ConnectException || e instanceof UnknownHostException) {
-                    DialogUtil.showAlertDialogMessage(MainActivity.this, getString(R.string.api_connection_error_title), getString(R.string.api_connection_error_message));
+                    DialogUtil.showConnectionFailedErrorMessage(MainActivity.this);
                 } else {
                     DialogUtil.showGenericErrorMessage(MainActivity.this);
                 }

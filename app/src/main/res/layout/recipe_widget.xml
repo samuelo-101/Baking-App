@@ -14,29 +14,26 @@
         android:layout_height="match_parent"
         android:contentDescription="@string/treat" />
 
-    <Button
-        android:id="@+id/imageButton_go_to_activity"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:maxWidth="100dp"
+    <TextView
+        android:clickable="false"
+        android:id="@+id/textView_recipe_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:background="@drawable/button_selector"
-        android:contentDescription="@string/view_ingredients"
-        android:padding="8dp"
-        android:drawableRight="@drawable/ic_keyboard_arrow_right_white_48"
-        android:layout_alignParentRight="true"
-        android:drawableEnd="@drawable/ic_keyboard_arrow_right_white_48"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="8dp"
         android:textColor="@color/white"
+        android:contentDescription="@string/recipe_name"
+        android:fontFamily="cursive"
+        android:gravity="center_horizontal"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:fontFamily="cursive"
-        tools:text="Cake"/>
+        tools:text="Cake" />
 
     <ListView
         android:id="@+id/listView_ingredients"
-        android:layout_below="@+id/imageButton_go_to_activity"
+        android:layout_below="@+id/textView_recipe_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/widget_list_item"/>
