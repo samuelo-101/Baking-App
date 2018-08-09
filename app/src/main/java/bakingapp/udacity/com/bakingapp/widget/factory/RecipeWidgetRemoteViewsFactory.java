@@ -11,11 +11,10 @@ import java.util.List;
 import bakingapp.udacity.com.bakingapp.R;
 import bakingapp.udacity.com.bakingapp.db.RecipeDatabase;
 import bakingapp.udacity.com.bakingapp.db.entity.IngredientEntity;
-import bakingapp.udacity.com.bakingapp.db.entity.StepEntity;
 
 public class RecipeWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
-    private Context mContext;
+    private final Context mContext;
     private List<IngredientEntity> mIngredients;
 
     public RecipeWidgetRemoteViewsFactory(Context context) {

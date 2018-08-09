@@ -55,6 +55,7 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
     private final String TAG = getClass().getName();
 
     public static final String ARG_STEP = "StepActivity_ARG_STEP";
+    private static final String ARG_MEDIA_PLAYER_POSITION = "StepActivity_ARG_MEDIA_PLAYER_POSITION";
     private Step step;
 
     private OnFragmentInteractionListener mListener;
@@ -80,7 +81,6 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
     private SimpleExoPlayer mExoPlayer;
     private MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
-    private NotificationManager mNotificationManager;
 
     public StepMediaFragment() {
         // Required empty public constructor
@@ -118,7 +118,19 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
             setupUIForLandscapeMode(view);
         }
 
+        if(savedInstanceState != null && savedInstanceState.containsKey(ARG_MEDIA_PLAYER_POSITION)) {
+            mExoPlayer.seekTo(savedInstanceState.getLong(ARG_MEDIA_PLAYER_POSITION));
+        }
+
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(mExoPlayer != null) {
+            outState.putLong(ARG_MEDIA_PLAYER_POSITION, mExoPlayer.getCurrentPosition());
+        }
     }
 
     @Override

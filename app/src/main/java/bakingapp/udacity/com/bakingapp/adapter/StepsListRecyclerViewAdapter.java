@@ -28,10 +28,10 @@ public class StepsListRecyclerViewAdapter extends RecyclerView.Adapter {
     private final int HEADING_VIEW_TYPE = 1;
     private final int STEPS_VIEW_TYPE = 2;
 
-    private Context mContext;
-    private Recipe recipe;
-    private List<Step> steps;
-    private StepItemClickListener mStepItemClickListener;
+    private final Context mContext;
+    private final Recipe recipe;
+    private final List<Step> steps;
+    private final StepItemClickListener mStepItemClickListener;
 
     public StepsListRecyclerViewAdapter(Context context, Recipe recipe, StepItemClickListener stepItemClickListener) {
         this.mContext = context;
@@ -41,16 +41,20 @@ public class StepsListRecyclerViewAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) { ;
-        if(viewType == INGREDIENTS_VIEW_TYPE) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_ingredients_layout_navigator, parent, false);
-            return new ViewHolderIngredientsOption(view);
-        } else if(viewType == HEADING_VIEW_TYPE) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.steps_list_heading, parent, false);
-            return new ViewHolderStepsHeading(view);
-        } else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_step_item, parent, false);
-            return new ViewHolderSteps(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case INGREDIENTS_VIEW_TYPE: {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_ingredients_layout_navigator, parent, false);
+                return new ViewHolderIngredientsOption(view);
+            }
+            case HEADING_VIEW_TYPE: {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.steps_list_heading, parent, false);
+                return new ViewHolderStepsHeading(view);
+            }
+            default: {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_step_item, parent, false);
+                return new ViewHolderSteps(view);
+            }
         }
     }
 
@@ -59,63 +63,70 @@ public class StepsListRecyclerViewAdapter extends RecyclerView.Adapter {
 
         int itemViewType = getItemViewType(position);
 
-        if(itemViewType == INGREDIENTS_VIEW_TYPE) {
-            ViewHolderIngredientsOption viewHolder = (ViewHolderIngredientsOption) holder;
-            if(!TextUtils.isEmpty(recipe.getImage())) {
-                Picasso.with(mContext)
-                        .load(recipe.getImage())
-                        .placeholder(R.drawable.dough)
-                        .error(R.drawable.ic_broken_grey)
-                        .into(viewHolder.mImageViewRecipeImage);
-                viewHolder.mTextViewNoImageMessage.setVisibility(View.GONE);
-            }
-
-            viewHolder.mCoordinatorLayoutContainer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mStepItemClickListener.onIngredientsClick(recipe.getIngredients());
+        switch (itemViewType) {
+            case INGREDIENTS_VIEW_TYPE: {
+                ViewHolderIngredientsOption viewHolder = (ViewHolderIngredientsOption) holder;
+                if (!TextUtils.isEmpty(recipe.getImage())) {
+                    Picasso.with(mContext)
+                            .load(recipe.getImage())
+                            .placeholder(R.drawable.dough)
+                            .error(R.drawable.ic_broken_grey)
+                            .into(viewHolder.mImageViewRecipeImage);
+                    viewHolder.mTextViewNoImageMessage.setVisibility(View.GONE);
                 }
-            });
 
-            viewHolder.mImageButtonNavIngredients.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mStepItemClickListener.onIngredientsClick(recipe.getIngredients());
-                }
-            });
-        } else if(itemViewType == HEADING_VIEW_TYPE) {
-            ViewHolderStepsHeading viewHolder = (ViewHolderStepsHeading) holder;
-            viewHolder.mTextViewStepsHeading.setText(mContext.getString(R.string.steps));
-        } else if(itemViewType == STEPS_VIEW_TYPE) {
-            final ViewHolderSteps viewHolder = (ViewHolderSteps) holder;
-            final Step step = steps.get(position - 2);
+                viewHolder.mCoordinatorLayoutContainer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mStepItemClickListener.onIngredientsClick(recipe.getIngredients());
+                    }
+                });
 
-            if (step.getId() > 0) {
-                viewHolder.mTextViewStepId.setText(new StringBuilder().append(mContext.getString(R.string.step)).append(" ").append(step.getId()).toString());
-            } else {
-                viewHolder.mTextViewStepId.setText(step.getShortDescription());
+                viewHolder.mImageButtonNavIngredients.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mStepItemClickListener.onIngredientsClick(recipe.getIngredients());
+                    }
+                });
+                break;
             }
-
-            viewHolder.mImageViewStepDone.setVisibility(View.GONE);
-
-            if (!TextUtils.isEmpty(step.getThumbnailURL())) {
-                Picasso.with(mContext)
-                        .load(step.getThumbnailURL())
-                        .placeholder(R.drawable.ic_image_grey)
-                        .error(R.drawable.ic_broken_grey)
-                        .into(viewHolder.mImageViewStepImage);
-                viewHolder.mTextViewImageUnavailableMessage.setVisibility(View.GONE);
+            case HEADING_VIEW_TYPE: {
+                ViewHolderStepsHeading viewHolder = (ViewHolderStepsHeading) holder;
+                viewHolder.mTextViewStepsHeading.setText(mContext.getString(R.string.steps));
+                break;
             }
+            case STEPS_VIEW_TYPE: {
+                final ViewHolderSteps viewHolder = (ViewHolderSteps) holder;
+                final Step step = steps.get(position - 2);
 
-            viewHolder.mTextViewShortDescription.setText(step.getShortDescription());
-
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    viewHolder.mImageViewStepDone.setVisibility(View.VISIBLE);
-                    mStepItemClickListener.onStepClick(step);
+                if (step.getId() > 0) {
+                    viewHolder.mTextViewStepId.setText(new StringBuilder().append(mContext.getString(R.string.step)).append(" ").append(step.getId()).toString());
+                } else {
+                    viewHolder.mTextViewStepId.setText(step.getShortDescription());
                 }
-            });
+
+                viewHolder.mImageViewStepDone.setVisibility(View.GONE);
+
+                if (!TextUtils.isEmpty(step.getThumbnailURL())) {
+                    Picasso.with(mContext)
+                            .load(step.getThumbnailURL())
+                            .placeholder(R.drawable.ic_image_grey)
+                            .error(R.drawable.ic_broken_grey)
+                            .into(viewHolder.mImageViewStepImage);
+                    viewHolder.mTextViewImageUnavailableMessage.setVisibility(View.GONE);
+                }
+
+                viewHolder.mTextViewShortDescription.setText(step.getShortDescription());
+
+                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        viewHolder.mImageViewStepDone.setVisibility(View.VISIBLE);
+                        mStepItemClickListener.onStepClick(step);
+                    }
+                });
+                break;
+            }
         }
     }
 

@@ -5,19 +5,12 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import java.net.ConnectException;
 import java.net.UnknownHostException;
@@ -58,11 +51,9 @@ public class MainActivity extends AppCompatActivity implements BakingListRecycle
 
     private BakingListRecyclerViewAdapter adapter;
 
-    private CompositeDisposable disposable = new CompositeDisposable();
+    private final CompositeDisposable disposable = new CompositeDisposable();
 
     private ManageDesiredRecipeRepository manageDesiredRecipeRepository;
-
-    private RecipeEntity recipeEntity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,16 +146,10 @@ public class MainActivity extends AppCompatActivity implements BakingListRecycle
 
 
     @Override
-    public void onRecipeClick(int id) {
-        Log.i(TAG, String.valueOf(id));
-    }
-
-    @Override
     public void onRecipeClick(Recipe recipe, boolean isDesired) {
         Intent intent = new Intent(getApplicationContext(), RecipeDetailsActivity.class);
         Bundle extras = new Bundle();
         extras.putParcelable(RecipeDetailsActivity.ARG_RECIPE, recipe);
-        extras.putBoolean(RecipeDetailsActivity.ARG_RECIPE_IS_DESIRED, isDesired);
         intent.putExtras(extras);
         startActivity(intent);
     }

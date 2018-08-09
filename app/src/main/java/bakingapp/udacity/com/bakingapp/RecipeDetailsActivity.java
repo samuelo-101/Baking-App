@@ -2,6 +2,7 @@ package bakingapp.udacity.com.bakingapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
@@ -28,10 +29,8 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
     private final String TAG = getClass().getName();
 
     public static final String ARG_RECIPE = "RecipeDetailsActivity_ARG_RECIPE";
-    public static final String ARG_RECIPE_IS_DESIRED = "RecipeDetailsActivity_ARG_RECIPE_IS_DESIRED";
 
     private Recipe recipe;
-    private boolean isRecipeDesired;
 
     @BindView(R.id.toolbar)
     Toolbar mToolBar;
@@ -41,7 +40,9 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
 
-        validateRecipeExtra(savedInstanceState);
+        if (!validateRecipeExtra()) {
+            return;
+        }
 
         ButterKnife.bind(this);
 
@@ -49,10 +50,12 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(recipe.getName());
 
-        if(isTabletScreen()) {
-            setupUIForTabletLayout();
-        } else {
-            setupUIForNonTabletDisplay();
+        if (savedInstanceState == null) {
+            if (isTabletScreen()) {
+                setupUIForTabletLayout();
+            } else {
+                setupUIForNonTabletDisplay();
+            }
         }
     }
 
@@ -72,15 +75,16 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    private void validateRecipeExtra(Bundle savedInstanceState) {
-        Bundle extras = savedInstanceState == null ? getIntent().getExtras() : savedInstanceState;
-        if (extras != null && extras.containsKey(ARG_RECIPE) && extras.containsKey(ARG_RECIPE_IS_DESIRED)) {
+    private boolean validateRecipeExtra() {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.containsKey(ARG_RECIPE)) {
             recipe = extras.getParcelable(ARG_RECIPE);
-            isRecipeDesired = extras.getBoolean(ARG_RECIPE_IS_DESIRED);
+            return true;
         } else {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
             finish();
+            return false;
         }
     }
 
@@ -92,7 +96,6 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout_step_list_fragment, StepListFragment.newInstance(recipe));
-        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
@@ -100,6 +103,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout_fragment_container, StepListFragment.newInstance(recipe));
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
@@ -107,7 +111,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
     public void onFragmentStepClick(Step step) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if(isTabletScreen()) {
+        if (isTabletScreen()) {
             fragmentTransaction.replace(R.id.frameLayout_step_media_fragment, StepMediaFragment.newInstance(step));
         } else {
             fragmentTransaction.replace(R.id.frameLayout_fragment_container, StepMediaFragment.newInstance(step));
@@ -120,7 +124,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
     public void onFragmentIngredientsNavigationClick(List<Ingredient> ingredients) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if(isTabletScreen()) {
+        if (isTabletScreen()) {
             fragmentTransaction.replace(R.id.frameLayout_step_media_fragment, IngredientsFragment.newInstance(new ArrayList<>(ingredients)));
         } else {
             fragmentTransaction.replace(R.id.frameLayout_fragment_container, IngredientsFragment.newInstance(new ArrayList<>(ingredients)));
@@ -131,9 +135,9 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
 
     @Override
     public void setupDisplay(boolean isFullScreen) {
-        if(isFullScreen && getSupportActionBar().isShowing()) {
+        if (isFullScreen && getSupportActionBar().isShowing()) {
             getSupportActionBar().hide();
-        } else if(!isFullScreen && ! getSupportActionBar().isShowing()) {
+        } else if (!isFullScreen && !getSupportActionBar().isShowing()) {
             getSupportActionBar().show();
         }
     }

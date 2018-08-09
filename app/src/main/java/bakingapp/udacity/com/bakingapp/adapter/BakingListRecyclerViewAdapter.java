@@ -1,8 +1,6 @@
 package bakingapp.udacity.com.bakingapp.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,10 +20,10 @@ import butterknife.ButterKnife;
 
 public class BakingListRecyclerViewAdapter extends RecyclerView.Adapter<BakingListRecyclerViewAdapter.ViewHolder> {
 
-    private Context mContext;
+    private final Context mContext;
     private List<Recipe> recipes;
-    private BakingRecipeItemClickListener mBakingRecipeItemClickListener;
-    private List<Integer> mColors;
+    private final BakingRecipeItemClickListener mBakingRecipeItemClickListener;
+    private final List<Integer> mColors;
     private RecipeEntity desiredRecipe;
 
     public BakingListRecyclerViewAdapter(Context context, List<Recipe> recipes, BakingRecipeItemClickListener bakingRecipeItemClickListener) {
@@ -119,7 +117,6 @@ public class BakingListRecyclerViewAdapter extends RecyclerView.Adapter<BakingLi
     }
 
     public interface BakingRecipeItemClickListener {
-        void onRecipeClick(int id);
         void onRecipeClick(Recipe recipe, boolean isDesired);
         void onMakeRecipeDesiredClick(Recipe recipe);
     }

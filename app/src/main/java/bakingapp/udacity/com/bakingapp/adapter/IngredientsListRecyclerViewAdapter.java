@@ -1,6 +1,5 @@
 package bakingapp.udacity.com.bakingapp.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +15,9 @@ import butterknife.ButterKnife;
 
 public class IngredientsListRecyclerViewAdapter extends RecyclerView.Adapter<IngredientsListRecyclerViewAdapter.ViewHolder> {
 
-    private Context mContext;
-    private List<Ingredient> mIngredients;
+    private final List<Ingredient> mIngredients;
 
-    public IngredientsListRecyclerViewAdapter(Context context, List<Ingredient> ingredients) {
-        this.mContext = context;
+    public IngredientsListRecyclerViewAdapter(List<Ingredient> ingredients) {
         this.mIngredients = ingredients;
     }
 

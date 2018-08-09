@@ -17,7 +17,7 @@ public class Recipe implements Parcelable {
 
     public Recipe() {}
 
-    public Recipe(Parcel in) {
+    private Recipe(Parcel in) {
         id = in.readInt();
         name = in.readString();
         if(ingredients == null) {

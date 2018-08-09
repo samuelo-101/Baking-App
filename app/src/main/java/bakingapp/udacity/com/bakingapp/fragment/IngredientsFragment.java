@@ -64,7 +64,7 @@ public class IngredientsFragment extends Fragment {
     private void validateIngredientsArgument() {
         if (getArguments() != null) {
             ingredients = getArguments().getParcelableArrayList(ARG_INGREDIENTS_LIST);
-            adapter = new IngredientsListRecyclerViewAdapter(getContext(), ingredients);
+            adapter = new IngredientsListRecyclerViewAdapter(ingredients);
         } else {
             Intent intent = new Intent(getContext(), MainActivity.class);
             getActivity().startActivity(intent);

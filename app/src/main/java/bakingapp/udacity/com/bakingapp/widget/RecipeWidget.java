@@ -15,14 +15,10 @@ import bakingapp.udacity.com.bakingapp.MainActivity;
 import bakingapp.udacity.com.bakingapp.R;
 import bakingapp.udacity.com.bakingapp.RecipeDetailsActivity;
 import bakingapp.udacity.com.bakingapp.api.model.Recipe;
-import bakingapp.udacity.com.bakingapp.db.RecipeDatabase;
-import bakingapp.udacity.com.bakingapp.db.dao.RecipeEntityDao;
-import bakingapp.udacity.com.bakingapp.db.dao.StepEntityDao;
 import bakingapp.udacity.com.bakingapp.db.entity.RecipeEntity;
 import bakingapp.udacity.com.bakingapp.db.entity.StepEntity;
 import bakingapp.udacity.com.bakingapp.db.repo.ManageDesiredRecipeRepository;
 import bakingapp.udacity.com.bakingapp.db.repo.dto.FetchDesiredRecipeDTO;
-import bakingapp.udacity.com.bakingapp.util.DataTransferUtil;
 import bakingapp.udacity.com.bakingapp.util.DialogUtil;
 import bakingapp.udacity.com.bakingapp.widget.service.RecipeWidgetService;
 
@@ -34,26 +30,25 @@ public class RecipeWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId, FetchDesiredRecipeDTO fetchDesiredRecipeDTO) {
 
-        String recipeName = fetchDesiredRecipeDTO != null && fetchDesiredRecipeDTO.getRecipe() != null ? fetchDesiredRecipeDTO.getRecipe().getName() : context.getString(R.string.tap_to_select_your_desired_recipe);
+        String recipeName = (fetchDesiredRecipeDTO != null && fetchDesiredRecipeDTO.getRecipe() != null) ? fetchDesiredRecipeDTO.getRecipe().getName() : context.getString(R.string.tap_to_select_your_desired_recipe);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
-        views.setTextViewText(R.id.textView_recipe_name, recipeName);
+        views.setTextViewText(R.id.imageButton_go_to_activity, recipeName);
 
-        Intent navIntent = null;
+        Intent navIntent;
         if(fetchDesiredRecipeDTO != null && fetchDesiredRecipeDTO.getRecipe() != null) {
+            navIntent = new Intent(context, RecipeDetailsActivity.class);
             Recipe recipe = fetchDesiredRecipeDTO.getRecipe();
             recipe.setSteps(fetchDesiredRecipeDTO.getSteps());
             recipe.setIngredients(fetchDesiredRecipeDTO.getIngredients());
-            navIntent = new Intent(context, RecipeDetailsActivity.class);
             Bundle extras = new Bundle();
             extras.putParcelable(RecipeDetailsActivity.ARG_RECIPE, recipe);
-            extras.putBoolean(RecipeDetailsActivity.ARG_RECIPE_IS_DESIRED, true);
             navIntent.putExtras(extras);
         } else {
             navIntent = new Intent(context, MainActivity.class);
         }
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, navIntent, 0);
-        views.setOnClickPendingIntent(R.id.relativeLayout_widget_container, pendingIntent);
+        views.setOnClickPendingIntent(R.id.imageButton_go_to_activity, pendingIntent);
 
         Intent intent = new Intent(context, RecipeWidgetService.class);
         views.setRemoteAdapter(R.id.listView_ingredients, intent);
@@ -107,7 +102,9 @@ public class RecipeWidget extends AppWidgetProvider {
         if (action != null && action.equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             ComponentName componentName = new ComponentName(context, RecipeWidget.class);
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetManager.getAppWidgetIds(componentName), R.id.listView_ingredients);
+            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(componentName);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.listView_ingredients);
+            this.onUpdate(context, appWidgetManager, appWidgetIds);
         }
         super.onReceive(context, intent);
     }

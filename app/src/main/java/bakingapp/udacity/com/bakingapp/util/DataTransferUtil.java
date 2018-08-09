@@ -62,7 +62,7 @@ public class DataTransferUtil {
         List<Step> steps = new ArrayList<>();
         for (StepEntity stepEntity : stepEntities) {
             Step step = new Step();
-            step.setId(stepEntity.getId());
+            step.setId(stepEntity.getStepId());
             step.setDescription(stepEntity.getDescription());
             step.setShortDescription(stepEntity.getShortDescription());
             step.setThumbnailURL(stepEntity.getThumbnailURL());

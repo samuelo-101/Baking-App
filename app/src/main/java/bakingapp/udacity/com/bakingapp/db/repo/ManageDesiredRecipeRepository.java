@@ -2,15 +2,9 @@ package bakingapp.udacity.com.bakingapp.db.repo;
 
 import android.content.Context;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import bakingapp.udacity.com.bakingapp.R;
-import bakingapp.udacity.com.bakingapp.api.model.Ingredient;
-import bakingapp.udacity.com.bakingapp.api.model.Recipe;
-import bakingapp.udacity.com.bakingapp.api.model.Step;
 import bakingapp.udacity.com.bakingapp.db.RecipeDatabase;
 import bakingapp.udacity.com.bakingapp.db.dao.IngredientEntityDao;
 import bakingapp.udacity.com.bakingapp.db.dao.RecipeEntityDao;
@@ -84,33 +78,6 @@ public class ManageDesiredRecipeRepository {
                 List<RecipeEntity> recipeEntities = recipeEntityDao.fetchAllDesired();
                 RecipeEntity recipeEntity = (recipeEntities == null || recipeEntities.size() != 1) ? null : recipeEntities.get(0);
                 mDatabaseOperationCallback.onGetDesiredRecipeSuccess(recipeEntity);
-            }
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new CompletableObserver() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        mDatabaseOperationCallback.onError(mContext.getResources().getString(R.string.error_db_query_insert_failed));
-                    }
-                });
-    }
-
-    public void getDesiredRecipeSteps() {
-        Completable.fromAction(new Action() {
-            @Override
-            public void run() {
-                List<StepEntity> recipeEntities = stepEntityDao.fetchAll();
-                mDatabaseOperationCallback.onGetDesiredRecipeStepsSuccess(recipeEntities);
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new CompletableObserver() {

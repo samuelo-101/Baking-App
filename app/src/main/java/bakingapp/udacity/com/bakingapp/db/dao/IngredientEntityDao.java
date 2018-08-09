@@ -7,7 +7,6 @@ import android.arch.persistence.room.Query;
 import java.util.List;
 
 import bakingapp.udacity.com.bakingapp.db.entity.IngredientEntity;
-import bakingapp.udacity.com.bakingapp.db.entity.RecipeEntity;
 
 @Dao
 public interface IngredientEntityDao {
