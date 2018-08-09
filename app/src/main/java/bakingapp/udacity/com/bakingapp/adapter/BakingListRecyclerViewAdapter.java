@@ -15,10 +15,11 @@ import java.util.List;
 import bakingapp.udacity.com.bakingapp.R;
 import bakingapp.udacity.com.bakingapp.api.model.Recipe;
 import bakingapp.udacity.com.bakingapp.db.entity.RecipeEntity;
+import bakingapp.udacity.com.bakingapp.viewholder.BakingListRecyclerViewAdapterViewHolder;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class BakingListRecyclerViewAdapter extends RecyclerView.Adapter<BakingListRecyclerViewAdapter.ViewHolder> {
+public class BakingListRecyclerViewAdapter extends RecyclerView.Adapter<BakingListRecyclerViewAdapterViewHolder> {
 
     private final Context mContext;
     private List<Recipe> recipes;
@@ -38,13 +39,13 @@ public class BakingListRecyclerViewAdapter extends RecyclerView.Adapter<BakingLi
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BakingListRecyclerViewAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.baking_recyclerview_item, parent, false);
-        return new ViewHolder(view);
+        return new BakingListRecyclerViewAdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(BakingListRecyclerViewAdapterViewHolder holder, int position) {
         final Recipe recipe = recipes.get(position);
 
         int backgroundColorIndex = position % this.mColors.size();
@@ -97,23 +98,6 @@ public class BakingListRecyclerViewAdapter extends RecyclerView.Adapter<BakingLi
     public void updateRecipesWithDesiredRecipe(RecipeEntity desiredRecipe) {
         this.desiredRecipe = desiredRecipe;
         notifyDataSetChanged();
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.textView_name)
-        TextView mTextViewName;
-
-        @BindView(R.id.constraintLayout_container)
-        ConstraintLayout mConstraintLayoutContainer;
-
-        @BindView(R.id.imageButton_make_recipe_desired)
-        ImageButton mImageButtonMakeRecipeDesired;
-
-        ViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
     }
 
     public interface BakingRecipeItemClickListener {

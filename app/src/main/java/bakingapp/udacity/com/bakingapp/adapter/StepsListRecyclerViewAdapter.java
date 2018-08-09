@@ -1,15 +1,11 @@
 package bakingapp.udacity.com.bakingapp.adapter;
 
 import android.content.Context;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -19,8 +15,9 @@ import bakingapp.udacity.com.bakingapp.R;
 import bakingapp.udacity.com.bakingapp.api.model.Ingredient;
 import bakingapp.udacity.com.bakingapp.api.model.Recipe;
 import bakingapp.udacity.com.bakingapp.api.model.Step;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import bakingapp.udacity.com.bakingapp.viewholder.ViewHolderIngredientsOption;
+import bakingapp.udacity.com.bakingapp.viewholder.ViewHolderSteps;
+import bakingapp.udacity.com.bakingapp.viewholder.ViewHolderStepsHeading;
 
 public class StepsListRecyclerViewAdapter extends RecyclerView.Adapter {
 
@@ -143,60 +140,6 @@ public class StepsListRecyclerViewAdapter extends RecyclerView.Adapter {
             return HEADING_VIEW_TYPE;
         }
         return STEPS_VIEW_TYPE;
-    }
-
-    class ViewHolderSteps extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.textView_step_id)
-        TextView mTextViewStepId;
-
-        @BindView(R.id.imageView_recipe_image)
-        ImageView mImageViewStepImage;
-
-        @BindView(R.id.textView_image_unavailable)
-        TextView mTextViewImageUnavailableMessage;
-
-        @BindView(R.id.textView_short_description)
-        TextView mTextViewShortDescription;
-
-        @BindView(R.id.imageView_check)
-        ImageView mImageViewStepDone;
-
-        ViewHolderSteps(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-    }
-
-    class ViewHolderStepsHeading extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.textView_steps_label)
-        TextView mTextViewStepsHeading;
-
-        ViewHolderStepsHeading(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-    }
-
-    class ViewHolderIngredientsOption extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.coordinatorLayout_container)
-        ConstraintLayout mCoordinatorLayoutContainer;
-
-        @BindView(R.id.imageView_recipe_image)
-        ImageView mImageViewRecipeImage;
-
-        @BindView(R.id.textView_image_unavailable)
-        TextView mTextViewNoImageMessage;
-
-        @BindView(R.id.imageButton_view_ingredients)
-        ImageButton mImageButtonNavIngredients;
-
-        ViewHolderIngredientsOption(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
     }
 
     public interface StepItemClickListener {
