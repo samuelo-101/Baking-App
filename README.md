@@ -3,6 +3,11 @@ This is an Android application that shows recipes and tutorial videos for variou
 
 It was developed in line with requirements for The Baking App project, as part of The Udacity Android Developer Nanodegree.
 
+# App Details
+Users can select any of the recipes provided and will then be able to go through steps for each recipe that will guide him/her in baking the treat/meal.
+
+Each recipe also has a list of ingredients. In addition, users may watch videoes (where available as not all recipe steps have video content) that will guide him.her in completing particular steps as part of the baking process.
+
 
 # Acknowledments
 - Source code for Exo Media player was obtained and adapted from the Udacity Android Developer Nanodegree Tutorials. Github Repository ca be found here: 
