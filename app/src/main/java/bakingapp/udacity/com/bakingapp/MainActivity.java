@@ -63,6 +63,11 @@ public class MainActivity extends AppCompatActivity implements BakingListRecycle
 
         setSupportActionBar(mToolBar);
 
+        mSwipeRefreshLayout.setColorSchemeResources(
+                R.color.colorPrimary,
+                R.color.colorAccent,
+                R.color.md_purple_500);
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

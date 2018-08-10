@@ -16,39 +16,10 @@
     <color name="md_red_400">#EF5350</color>
     <color name="md_red_500">#F44336</color>
 
-    <!-- pinks -->
-
-    <!-- purples -->
     <color name="md_purple_500">#9C27B0</color>
 
-
-    <!-- deep purples -->
-
-    <!-- indigo -->
-
-    <!--blue-->
     <color name="md_blue_400">#42A5F5</color>
 
-
-    <!-- light blue-->
-
-    <!-- cyan -->
-
-    <!-- teal -->
-
-
-    <!-- green -->
     <color name="md_green_400">#66BB6A</color>
-
-    <!--light green-->
-
-    <!-- lime-->
-
-    <!--yellow -->
-
-    <!--amber-->
-
-    <!--orange-->
-
 
 </resources>

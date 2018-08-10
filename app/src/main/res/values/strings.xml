@@ -16,7 +16,7 @@
     <string name="ingredients">Ingredients</string>
     <string name="step">Step</string>
     <string name="steps">Steps</string>
-    <string name="media_unavailable">Media unavailable</string>
+    <string name="media_unavailable">This step has no media attached.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="step_done">Step done</string>
