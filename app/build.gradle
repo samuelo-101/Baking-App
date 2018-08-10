@@ -48,23 +48,13 @@ dependencies {
     implementation "android.arch.persistence.room:rxjava2:$room_version"
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"
 
-    def live_data_version = "1.1.1"
-    implementation "android.arch.lifecycle:livedata-core:$live_data_version"
-    implementation "android.arch.lifecycle:livedata:$live_data_version"
-
-    implementation "android.arch.lifecycle:viewmodel:$live_data_version"
-
-    implementation "android.arch.lifecycle:runtime:$live_data_version"
-    implementation "android.arch.lifecycle:extensions:$live_data_version"
-    annotationProcessor "android.arch.lifecycle:compiler:$live_data_version"
-
     androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    //androidTestImplementation('com.android.support.test:testing-support-lib:0.1')
+
     implementation group: 'com.android.support.test.espresso', name: 'espresso-contrib', version: '3.0.2'
 
 
