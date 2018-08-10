@@ -10,7 +10,7 @@ Each recipe also has a list of ingredients. In addition, users may watch videoes
 
 
 # Acknowledments
-- Source code for Exo Media player was obtained and adapted from the Udacity Android Developer Nanodegree Tutorials. Github Repository ca be found here: 
+- Source code for Exo Media player was obtained and adapted from the Udacity Android Developer Nanodegree Tutorials. Github Repository can be found here: https://github.com/udacity/AdvancedAndroid_ClassicalMusicQuiz/tree/TMED.06-Solution-AddMediaButtonReceiver
 
 - Some images uses were obtained from Pixabay. The following two URLs specificaly: 
   https://pixabay.com/en/food-epicure-meal-delicious-dark-3337715/ AND https://pixabay.com/en/dough-cook-recipe-italian-flour-943245/
