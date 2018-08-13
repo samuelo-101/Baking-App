@@ -1,10 +1,10 @@
 package bakingapp.udacity.com.bakingapp.fragment;
 
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -56,7 +56,10 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
 
     public static final String ARG_STEP = "StepActivity_ARG_STEP";
     private static final String ARG_MEDIA_PLAYER_POSITION = "StepActivity_ARG_MEDIA_PLAYER_POSITION";
+    private static final String ARG_MEDIA_PLAYER_PLAY_WHEN_READY = "StepActivity_ARG_MEDIA_PLAYER_PLAY_WHEN_READY";
     private Step step;
+    private boolean playWhenReady = true;
+    private Long seekToPosition = 0L;
 
     private OnFragmentInteractionListener mListener;
 
@@ -118,8 +121,13 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
             setupUIForLandscapeMode(view);
         }
 
-        if(savedInstanceState != null && savedInstanceState.containsKey(ARG_MEDIA_PLAYER_POSITION)) {
-            mExoPlayer.seekTo(savedInstanceState.getLong(ARG_MEDIA_PLAYER_POSITION));
+        if(savedInstanceState != null) {
+            if(savedInstanceState.containsKey(ARG_MEDIA_PLAYER_POSITION)) {
+                seekToPosition = savedInstanceState.getLong(ARG_MEDIA_PLAYER_POSITION);
+            }
+            if(savedInstanceState.containsKey(ARG_MEDIA_PLAYER_PLAY_WHEN_READY)) {
+                playWhenReady = savedInstanceState.getBoolean(ARG_MEDIA_PLAYER_PLAY_WHEN_READY);
+            }
         }
 
         return view;
@@ -130,6 +138,7 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
         super.onSaveInstanceState(outState);
         if(mExoPlayer != null) {
             outState.putLong(ARG_MEDIA_PLAYER_POSITION, mExoPlayer.getCurrentPosition());
+            outState.putBoolean(ARG_MEDIA_PLAYER_PLAY_WHEN_READY, mExoPlayer.getPlayWhenReady());
         }
     }
 
@@ -144,6 +153,42 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
         }
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(Util.SDK_INT > 23) {
+            setupMediaPlayerViews();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(Util.SDK_INT <= 23 || mExoPlayer == null) {
+            setupMediaPlayerViews();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        playWhenReady = mExoPlayer.getPlayWhenReady();
+        seekToPosition = mExoPlayer.getCurrentPosition();
+        if(Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        seekToPosition = mExoPlayer.getCurrentPosition();
+        if(Util.SDK_INT > 23) {
+            releasePlayer();
+        }
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -153,7 +198,6 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        releasePlayer();
         mListener.setupDisplay(false);
     }
 
@@ -171,7 +215,7 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
     private void setupUIForLandscapeMode(View parent) {
         mPlayerView = parent.findViewById(R.id.exoplayer_view);
         mTextViewMediaUnavailable = parent.findViewById(R.id.textView_media_unavailable);
-        setupMediaPlayerViews();
+        enterFullScreenMode();
     }
 
     private void setupUIForPortraitOrTabletMode() {
@@ -186,8 +230,6 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
 
         mtextViewShortDescription.setText(step.getShortDescription());
         mtextViewDescription.setText(step.getDescription());
-
-        setupMediaPlayerViews();
     }
 
     private void setupMediaPlayerViews() {
@@ -234,7 +276,10 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
             MediaSource mediaSource = new ExtractorMediaSource(uri, new DefaultDataSourceFactory(
                     getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
             mExoPlayer.prepare(mediaSource);
-            mExoPlayer.setPlayWhenReady(true);
+            if(seekToPosition > 0L) {
+                mExoPlayer.seekTo(seekToPosition);
+            }
+            mExoPlayer.setPlayWhenReady(playWhenReady);
         }
     }
 
@@ -244,6 +289,17 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
             mExoPlayer.stop();
             mExoPlayer.release();
             mExoPlayer = null;
+        }
+    }
+
+    private void enterFullScreenMode() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            mPlayerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         }
     }
 

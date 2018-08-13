@@ -25,4 +25,8 @@
     <string name="recipe_set_as_desired">This recipe has been set as your desired recipe</string>
     <string name="you_have_no_desired_recipe_selected">No desired recipe selected.</string>
     <string name="treat">Treat</string>
+    <string name="previous">Previous</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="video_preview">Fideo Preview</string>
 </resources>

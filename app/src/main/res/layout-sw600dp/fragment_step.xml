@@ -83,6 +83,8 @@
 
         <com.google.android.exoplayer2.ui.SimpleExoPlayerView
             android:id="@+id/exoplayer_view"
+            app:fastforward_increment="1000"
+            app:rewind_increment="1000"
             android:layout_width="match_parent"
             android:layout_height="350dp"
             android:minHeight="@dimen/video_player_height"
