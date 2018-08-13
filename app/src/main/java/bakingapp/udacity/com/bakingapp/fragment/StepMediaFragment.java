@@ -173,8 +173,10 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
     @Override
     public void onPause() {
         super.onPause();
-        playWhenReady = mExoPlayer.getPlayWhenReady();
-        seekToPosition = mExoPlayer.getCurrentPosition();
+        if(mExoPlayer != null) {
+            playWhenReady = mExoPlayer.getPlayWhenReady();
+            seekToPosition = mExoPlayer.getCurrentPosition();
+        }
         if(Util.SDK_INT <= 23) {
             releasePlayer();
         }
@@ -183,7 +185,9 @@ public class StepMediaFragment extends Fragment implements ExoPlayer.EventListen
     @Override
     public void onStop() {
         super.onStop();
-        seekToPosition = mExoPlayer.getCurrentPosition();
+        if(mExoPlayer != null) {
+            seekToPosition = mExoPlayer.getCurrentPosition();
+        }
         if(Util.SDK_INT > 23) {
             releasePlayer();
         }
